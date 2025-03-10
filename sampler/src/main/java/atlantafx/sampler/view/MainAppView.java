@@ -1,6 +1,5 @@
 package atlantafx.sampler.view;
 
-import atlantafx.base.layout.DeckPane;
 import atlantafx.sampler.controller.AuthController;
 import atlantafx.sampler.view.dashboard.DashboardFactory;
 import atlantafx.sampler.view.dashboard.DashboardView;
@@ -14,7 +13,6 @@ public class MainAppView extends StackPane {
 
     private final AuthController authController;
     private final DashboardFactory dashboardFactory;
-    private final DeckPane deckPane;
     private final AuthView authView;
     private DashboardView currentDashboard;
 
@@ -22,11 +20,8 @@ public class MainAppView extends StackPane {
         this.authController = AuthController.getInstance();
         this.dashboardFactory = DashboardFactory.getInstance();
         
-        // Create views
+        // Create auth view
         authView = new AuthView();
-        
-        // Set up deck pane for swapping views
-        deckPane = new DeckPane(authView);
         
         // Set callbacks
         authView.setOnAuthSuccess(v -> showDashboard());
@@ -39,9 +34,6 @@ public class MainAppView extends StackPane {
                 showAuth();
             }
         });
-        
-        // Add to parent container
-        getChildren().add(deckPane);
         
         // Show initial view based on authentication state
         if (authController.isAuthenticated()) {
@@ -56,13 +48,15 @@ public class MainAppView extends StackPane {
      */
     private void showAuth() {
         // Remove current dashboard if it exists
-        if (currentDashboard != null) {
-            deckPane.getChildren().remove(currentDashboard);
+        if (currentDashboard != null && getChildren().contains(currentDashboard)) {
+            getChildren().remove(currentDashboard);
             currentDashboard = null;
         }
         
-        // Show auth view
-        deckPane.setTopNode(authView);
+        // Add auth view if not already there
+        if (!getChildren().contains(authView)) {
+            getChildren().add(authView);
+        }
     }
     
     /**
@@ -75,12 +69,15 @@ public class MainAppView extends StackPane {
         // Set logout callback
         currentDashboard.setOnLogout(v -> authController.logout());
         
-        // Add to deck pane if not already there
-        if (!deckPane.getChildren().contains(currentDashboard)) {
-            deckPane.getChildren().add(currentDashboard);
+        // Remove auth view if it exists
+        if (getChildren().contains(authView)) {
+            getChildren().remove(authView);
         }
         
-        // Show dashboard
-        deckPane.setTopNode(currentDashboard);
+        // Remove any previous dashboards
+        getChildren().removeIf(node -> node instanceof DashboardView && node != currentDashboard);
+        
+        // Add the new dashboard
+        getChildren().add(currentDashboard);
     }
 } 

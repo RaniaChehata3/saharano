@@ -1,8 +1,6 @@
 package atlantafx.sampler.view;
 
-import atlantafx.base.layout.DeckPane;
 import atlantafx.sampler.controller.AuthController;
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
 import java.util.function.Consumer;
@@ -12,7 +10,6 @@ import java.util.function.Consumer;
  */
 public class AuthView extends StackPane {
 
-    private final DeckPane deckPane;
     private final LoginView loginView;
     private final SignupView signupView;
     private final AuthController authController;
@@ -25,10 +22,6 @@ public class AuthView extends StackPane {
         loginView = new LoginView();
         signupView = new SignupView();
         
-        // Set up deck pane for swapping views
-        deckPane = new DeckPane(loginView, signupView);
-        deckPane.setTopNode(loginView); // Set login as the initial view
-        
         // Set callbacks
         loginView.setOnLoginSuccess(v -> {
             if (onAuthSuccess != null) {
@@ -36,7 +29,7 @@ public class AuthView extends StackPane {
             }
         });
         
-        loginView.setOnSignupRequest(v -> deckPane.setTopNode(signupView));
+        loginView.setOnSignupRequest(v -> showSignup());
         
         signupView.setOnSignupSuccess(v -> {
             if (onAuthSuccess != null) {
@@ -44,24 +37,32 @@ public class AuthView extends StackPane {
             }
         });
         
-        signupView.setOnLoginRequest(v -> deckPane.setTopNode(loginView));
+        signupView.setOnLoginRequest(v -> showLogin());
         
-        // Add to parent container
-        getChildren().add(deckPane);
+        // Start with login view
+        getChildren().add(loginView);
     }
 
     /**
      * Shows the login view.
      */
     public void showLogin() {
-        deckPane.setTopNode(loginView);
+        // First remove all views
+        getChildren().clear();
+        
+        // Add login view
+        getChildren().add(loginView);
     }
 
     /**
      * Shows the signup view.
      */
     public void showSignup() {
-        deckPane.setTopNode(signupView);
+        // First remove all views
+        getChildren().clear();
+        
+        // Add signup view
+        getChildren().add(signupView);
     }
 
     /**
