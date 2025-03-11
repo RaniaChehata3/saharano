@@ -68,15 +68,13 @@ public class MVCLauncher extends Application {
             : SceneAntialiasing.DISABLED;
         var scene = new Scene(root, 1200, 800, false, antialiasing);
         scene.setOnKeyPressed(this::dispatchHotkeys);
-
-        var tm = ThemeManager.getInstance();
-        tm.setScene(scene);
-        tm.setTheme(tm.getDefaultTheme());
-        if (IS_DEV_MODE) {
-            startCssFX(scene);
-        }
-
-        scene.getStylesheets().addAll(Resources.resolve("assets/styles/index.css"));
+        
+        // Set default stylesheet directly
+        String appStyle = getClass().getResource("/atlantafx/sampler/assets/styles/index.css").toExternalForm();
+        scene.getStylesheets().add(appStyle);
+        
+        // Apply default modena style
+        Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
 
         stage.setScene(scene);
         stage.setTitle("Medical System - " + System.getProperty("app.name"));
@@ -113,28 +111,6 @@ public class MVCLauncher extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @SuppressWarnings("CatchAndPrintStackTrace")
-    private void startCssFX(Scene scene) {
-        URIToPathConverter fileUrlConverter = uri -> {
-            try {
-                if (uri != null && uri.startsWith("file:")) {
-                    return Paths.get(URI.create(uri));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        };
-
-        CSSFX.addConverter(fileUrlConverter).start();
-        CSSFXLogger.setLoggerFactory(loggerName -> (level, message, args) -> {
-            if (level.ordinal() <= LogLevel.INFO.ordinal()) {
-                System.out.println("[" + level + "] CSSFX: " + String.format(message, args));
-            }
-        });
-        CSSFX.start(scene);
     }
 
     private void dispatchHotkeys(KeyEvent event) {

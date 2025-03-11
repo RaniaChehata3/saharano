@@ -6,40 +6,31 @@ import javafx.scene.layout.StackPane;
 import java.util.function.Consumer;
 
 /**
- * Container view that manages login and signup views.
+ * Container view that manages authentication UI.
  */
 public class AuthView extends StackPane {
 
     private final LoginView loginView;
-    private final SignupView signupView;
     private final AuthController authController;
     private Consumer<Void> onAuthSuccess;
 
     public AuthView() {
         this.authController = AuthController.getInstance();
         
-        // Create views
+        // Create login view
         loginView = new LoginView();
-        signupView = new SignupView();
         
-        // Set callbacks
+        // Set success callback
         loginView.setOnLoginSuccess(v -> {
             if (onAuthSuccess != null) {
                 onAuthSuccess.accept(null);
             }
         });
         
-        loginView.setOnSignupRequest(v -> showSignup());
+        // Disable signup since we have direct access now
+        loginView.setOnSignupRequest(null);
         
-        signupView.setOnSignupSuccess(v -> {
-            if (onAuthSuccess != null) {
-                onAuthSuccess.accept(null);
-            }
-        });
-        
-        signupView.setOnLoginRequest(v -> showLogin());
-        
-        // Start with login view
+        // Add login view to the container
         getChildren().add(loginView);
     }
 
@@ -47,22 +38,9 @@ public class AuthView extends StackPane {
      * Shows the login view.
      */
     public void showLogin() {
-        // First remove all views
+        // Make sure login view is shown
         getChildren().clear();
-        
-        // Add login view
         getChildren().add(loginView);
-    }
-
-    /**
-     * Shows the signup view.
-     */
-    public void showSignup() {
-        // First remove all views
-        getChildren().clear();
-        
-        // Add signup view
-        getChildren().add(signupView);
     }
 
     /**

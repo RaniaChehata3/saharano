@@ -24,7 +24,11 @@ public class MainAppView extends StackPane {
         authView = new AuthView();
         
         // Set callbacks
-        authView.setOnAuthSuccess(v -> showDashboard());
+        authView.setOnAuthSuccess(v -> {
+            if (authController.isAuthenticated()) {
+                showDashboard();
+            }
+        });
         
         // Listen for authentication state changes
         authController.authenticatedProperty().addListener((obs, wasAuthenticated, isAuthenticated) -> {
@@ -35,12 +39,8 @@ public class MainAppView extends StackPane {
             }
         });
         
-        // Show initial view based on authentication state
-        if (authController.isAuthenticated()) {
-            showDashboard();
-        } else {
-            showAuth();
-        }
+        // Always start with auth view initially
+        showAuth();
     }
     
     /**
@@ -63,21 +63,33 @@ public class MainAppView extends StackPane {
      * Shows the appropriate dashboard for the authenticated user.
      */
     private void showDashboard() {
-        // Create dashboard for current user
-        currentDashboard = dashboardFactory.createDashboard();
-        
-        // Set logout callback
-        currentDashboard.setOnLogout(v -> authController.logout());
-        
-        // Remove auth view if it exists
-        if (getChildren().contains(authView)) {
-            getChildren().remove(authView);
+        // Only proceed if user is authenticated
+        if (!authController.isAuthenticated()) {
+            showAuth();
+            return;
         }
         
-        // Remove any previous dashboards
-        getChildren().removeIf(node -> node instanceof DashboardView && node != currentDashboard);
-        
-        // Add the new dashboard
-        getChildren().add(currentDashboard);
+        try {
+            // Create dashboard for current user
+            currentDashboard = dashboardFactory.createDashboard();
+            
+            // Set logout callback
+            currentDashboard.setOnLogout(v -> authController.logout());
+            
+            // Remove auth view if it exists
+            if (getChildren().contains(authView)) {
+                getChildren().remove(authView);
+            }
+            
+            // Remove any previous dashboards
+            getChildren().removeIf(node -> node instanceof DashboardView && node != currentDashboard);
+            
+            // Add the new dashboard
+            getChildren().add(currentDashboard);
+        } catch (Exception e) {
+            System.err.println("Error creating dashboard: " + e.getMessage());
+            e.printStackTrace();
+            showAuth();
+        }
     }
 } 

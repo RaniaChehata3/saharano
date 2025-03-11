@@ -22,6 +22,7 @@ public class UserManager {
     private UserManager() {
         // Initialize with some demo users
         initializeDemoUsers();
+        System.out.println("UserManager initialized with " + users.size() + " users");
     }
     
     /**
@@ -41,21 +42,35 @@ public class UserManager {
      */
     private void initializeDemoUsers() {
         // Admin user
-        users.add(new User("admin", "admin123", "admin@example.com", "System", "Administrator", Role.ADMINISTRATOR));
+        User admin = new User("admin", "admin123", "admin@example.com", "System", "Administrator", Role.ADMINISTRATOR);
+        users.add(admin);
         
         // Doctor users
-        users.add(new User("doctor1", "doctor123", "doctor1@example.com", "John", "Smith", Role.DOCTOR));
-        users.add(new User("doctor2", "doctor123", "doctor2@example.com", "Emily", "Johnson", Role.DOCTOR));
+        User doctor1 = new User("doctor1", "doctor123", "doctor1@example.com", "John", "Smith", Role.DOCTOR);
+        users.add(doctor1);
+        
+        User doctor2 = new User("doctor2", "doctor123", "doctor2@example.com", "Emily", "Johnson", Role.DOCTOR);
+        users.add(doctor2);
         
         // Patient users
-        users.add(new User("patient1", "patient123", "patient1@example.com", "Michael", "Brown", Role.PATIENT));
-        users.add(new User("patient2", "patient123", "patient2@example.com", "Sarah", "Davis", Role.PATIENT));
+        User patient1 = new User("patient1", "patient123", "patient1@example.com", "Michael", "Brown", Role.PATIENT);
+        users.add(patient1);
+        
+        User patient2 = new User("patient2", "patient123", "patient2@example.com", "Sarah", "Davis", Role.PATIENT);
+        users.add(patient2);
         
         // Laboratory users
-        users.add(new User("lab1", "lab123", "lab1@example.com", "Central", "Laboratory", Role.LABORATORY));
+        User lab = new User("lab1", "lab123", "lab1@example.com", "Central", "Laboratory", Role.LABORATORY);
+        users.add(lab);
         
         // Default a visitor account for demo
-        users.add(new User("visitor", "visitor123", "visitor@example.com", "Guest", "User", Role.VISITOR));
+        User visitor = new User("visitor", "visitor123", "visitor@example.com", "Guest", "User", Role.VISITOR);
+        users.add(visitor);
+        
+        // Log the users that were created
+        for (User user : users) {
+            System.out.println("Created user: " + user.getUsername() + " with password: " + user.getPassword() + " and role: " + user.getRole());
+        }
     }
     
     /**
@@ -66,18 +81,43 @@ public class UserManager {
      * @return True if authentication successful, false otherwise
      */
     public boolean authenticate(String username, String password) {
+        System.out.println("Attempting to authenticate user: " + username);
+        
         Optional<User> userOptional = findUserByUsername(username);
         
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            System.out.println("Found user: " + user.getUsername() + " with password: " + user.getPassword());
+            
             if (user.getPassword().equals(password)) {
                 // Set as current user if authentication successful
                 setCurrentUser(user);
+                System.out.println("Authentication successful for user: " + username);
                 return true;
+            } else {
+                System.out.println("Password mismatch for user: " + username);
             }
+        } else {
+            System.out.println("User not found: " + username);
         }
         
         return false;
+    }
+    
+    /**
+     * Finds a user by username.
+     *
+     * @param username The username to search for
+     * @return An Optional containing the user if found, empty otherwise
+     */
+    public Optional<User> findUserByUsername(String username) {
+        if (username == null) {
+            return Optional.empty();
+        }
+        
+        return users.stream()
+                .filter(u -> username.equals(u.getUsername()))
+                .findFirst();
     }
     
     /**
@@ -92,7 +132,12 @@ public class UserManager {
             return false;
         }
         
+        // Add user to the list
         users.add(user);
+        
+        // Set as current user
+        setCurrentUser(user);
+        
         return true;
     }
     
@@ -103,19 +148,18 @@ public class UserManager {
      * @return True if update successful, false if user not found
      */
     public boolean updateUser(User user) {
-        Optional<User> existingUser = findUserByUsername(user.getUsername());
-        
-        if (existingUser.isPresent()) {
-            // Remove old user and add updated one
-            users.remove(existingUser.get());
-            users.add(user);
-            
-            // Update current user if that's the one being updated
-            if (getCurrentUser() != null && getCurrentUser().getUsername().equals(user.getUsername())) {
-                setCurrentUser(user);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(user.getUsername())) {
+                users.set(i, user);
+                
+                // Update current user if it's the same user
+                if (currentUser.get() != null && 
+                    currentUser.get().getUsername().equals(user.getUsername())) {
+                    setCurrentUser(user);
+                }
+                
+                return true;
             }
-            
-            return true;
         }
         
         return false;
@@ -143,28 +187,23 @@ public class UserManager {
     }
     
     /**
-     * Finds a user by their username.
-     *
-     * @param username The username to search for
-     * @return An Optional containing the user if found, empty otherwise
+     * Logs out the current user.
      */
-    public Optional<User> findUserByUsername(String username) {
-        return users.stream()
-                .filter(u -> u.getUsername().equals(username))
-                .findFirst();
+    public void logout() {
+        setCurrentUser(null);
     }
     
     /**
-     * Gets the current authenticated user.
+     * Gets the currently authenticated user.
      *
-     * @return The current user
+     * @return The current user or null if not authenticated
      */
     public User getCurrentUser() {
         return currentUser.get();
     }
     
     /**
-     * Gets the current user property.
+     * Gets the current user property for binding.
      *
      * @return The current user property
      */
@@ -173,7 +212,7 @@ public class UserManager {
     }
     
     /**
-     * Sets the current authenticated user.
+     * Sets the current user.
      *
      * @param user The user to set as current
      */
@@ -182,14 +221,7 @@ public class UserManager {
     }
     
     /**
-     * Logs out the current user.
-     */
-    public void logout() {
-        currentUser.set(null);
-    }
-    
-    /**
-     * Gets the list of all users.
+     * Gets the list of users.
      *
      * @return The observable list of users
      */
@@ -198,9 +230,9 @@ public class UserManager {
     }
     
     /**
-     * Gets the users list property.
+     * Gets the users property for binding.
      *
-     * @return The users list property
+     * @return The users property
      */
     public ListProperty<User> usersProperty() {
         return users;

@@ -1,0 +1,185 @@
+/* Primer Light Theme - Base styles for JavaFX applications */
+
+/* ======== COLORS ======== */
+* {
+    /* Background colors */
+    -color-bg-default: #ffffff;
+    -color-bg-subtle: #f6f8fa;
+    -color-bg-inset: #f0f1f3;
+    -color-bg-primary: #0366d6;
+    
+    /* Foreground colors */
+    -color-fg-default: #24292e;
+    -color-fg-muted: #57606a;
+    -color-fg-subtle: #6e7781;
+    -color-fg-on-emphasis: #ffffff;
+    
+    /* Border colors */
+    -color-border-default: #d0d7de;
+    -color-border-muted: #d8dee4;
+    -color-border-subtle: #e4e9ee;
+    
+    /* Status colors */
+    -color-accent: #0366d6;
+    -color-success: #2da44e;
+    -color-warning: #d29922;
+    -color-danger: #cf222e;
+    -color-info: #0969da;
+    
+    /* Hover effects */
+    -color-hover-bg: rgba(208, 215, 222, 0.32);
+    -color-hover-overlay: rgba(0, 0, 0, 0.05);
+}
+
+/* ======== ROOT ELEMENT ======== */
+.root {
+    -fx-background-color: -color-bg-default;
+    -fx-text-fill: -color-fg-default;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -fx-font-size: 12px;
+}
+
+/* ======== CONTROLS ======== */
+.button {
+    -fx-background-color: -color-bg-subtle;
+    -fx-text-fill: -color-fg-default;
+    -fx-border-color: -color-border-default;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px 12px;
+}
+
+.button:hover {
+    -fx-background-color: derive(-color-bg-subtle, -5%);
+}
+
+.button.primary {
+    -fx-background-color: -color-accent;
+    -fx-text-fill: -color-fg-on-emphasis;
+    -fx-border-color: transparent;
+}
+
+.button.primary:hover {
+    -fx-background-color: derive(-color-accent, -5%);
+}
+
+.text-field, .password-field {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: -color-accent;
+}
+
+.combo-box {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 8px;
+}
+
+/* Alerts and messages */
+.alert {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px;
+}
+
+.alert.info {
+    -fx-border-color: -color-info;
+}
+
+.alert.success {
+    -fx-border-color: -color-success;
+}
+
+.alert.warning {
+    -fx-border-color: -color-warning;
+}
+
+.alert.danger {
+    -fx-border-color: -color-danger;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: -color-fg-default;
+}
+
+.title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+}
+
+/* Hyperlinks */
+.hyperlink {
+    -fx-text-fill: -color-accent;
+    -fx-underline: false;
+}
+
+.hyperlink:hover {
+    -fx-underline: true;
+}
+
+/* Tables */
+.table-view {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.table-view .column-header {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-padding: 8px;
+}
+
+.table-view .table-cell {
+    -fx-padding: 8px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: -color-bg-subtle;
+}
+
+/* ListView */
+.list-view {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.list-cell {
+    -fx-padding: 8px;
+}
+
+.list-cell:odd {
+    -fx-background-color: -color-bg-subtle;
+} 

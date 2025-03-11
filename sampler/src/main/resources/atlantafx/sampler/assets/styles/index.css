@@ -1,0 +1,120 @@
+/* Application-specific styles */
+
+/* Main layout */
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    -fx-font-size: 13px;
+}
+
+.container {
+    -fx-padding: 15px;
+}
+
+/* Component styles */
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10px 0;
+}
+
+.subtitle-text {
+    -fx-font-size: 16px;
+    -fx-padding: 0 0 10px 0;
+    -fx-text-fill: #718096;
+}
+
+/* Card styles */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #e2e8f0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+}
+
+.card .header {
+    -fx-padding: 15px;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 6px 6px 0 0;
+    -fx-border-radius: 6px 6px 0 0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #e2e8f0;
+}
+
+.card .body {
+    -fx-padding: 15px;
+}
+
+/* Button styles */
+.button {
+    -fx-background-color: #edf2f7;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+.button.primary {
+    -fx-background-color: #4299e1;
+    -fx-text-fill: white;
+}
+
+.button.primary:hover {
+    -fx-background-color: #3182ce;
+}
+
+/* Form elements */
+.text-field, .password-field, .combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e2e8f0;
+    -fx-padding: 8px;
+}
+
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #4299e1;
+}
+
+/* Dashboard styles */
+.dashboard-header {
+    -fx-background-color: #4299e1;
+    -fx-padding: 10px 15px;
+}
+
+.dashboard-header .label {
+    -fx-text-fill: white;
+}
+
+.dashboard-sidebar {
+    -fx-background-color: #2d3748;
+    -fx-padding: 15px 0;
+}
+
+.dashboard-content {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20px;
+}
+
+/* Auth view styles */
+.auth-container {
+    -fx-alignment: center;
+    -fx-padding: 30px;
+}
+
+.auth-form {
+    -fx-spacing: 10px;
+    -fx-padding: 15px;
+    -fx-max-width: 400px;
+}
+
+/* Error message */
+.error-label {
+    -fx-text-fill: #e53e3e;
+    -fx-font-size: 12px;
+}

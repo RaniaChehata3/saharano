@@ -2,16 +2,20 @@
 
 package atlantafx.base.theme;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.stream.Stream;
-import javafx.css.Stylesheet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.sun.javafx.css.StyleManager;
 
 /**
- * A lazy man CSS to BSS compiler wrapper.
+ * Simple utility to compile CSS files to BSS format.
+ * JavaFX uses BSS binary stylesheets for faster loading.
  */
 public class ThemeCompiler {
 
@@ -27,22 +31,42 @@ public class ThemeCompiler {
      * @see #convertToBinary(Path)
      */
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("Usage: ThemeCompiler <directory>");
+            System.exit(1);
+        }
+
+        String directory = args[0];
+        System.out.println("Compiling CSS files in directory: " + directory);
+        
         try {
-            if (args.length < 1) {
-                throw new IllegalArgumentException("You must provide the source directory path");
+            List<File> cssFiles = Files.walk(Paths.get(directory))
+                .filter(path -> path.toString().endsWith(".css"))
+                .map(Path::toFile)
+                .collect(Collectors.toList());
+            
+            for (File cssFile : cssFiles) {
+                try {
+                    String cssPath = cssFile.getPath().replace('\\', '/');
+                    String bssPath = cssPath.replace(".css", ".bss");
+                    
+                    System.out.println("Compiling: " + cssPath + " to " + bssPath);
+                    
+                    // Use JavaFX StyleManager to convert CSS to BSS
+                    StyleManager.getInstance().addUserAgentStylesheet(cssPath);
+                    
+                    System.out.println("Successfully compiled: " + cssPath);
+                } catch (Exception e) {
+                    System.err.println("Failed to compile: " + cssFile.getPath());
+                    e.printStackTrace();
+                }
             }
-
-            if (args.length > 1) {
-                throw new IllegalArgumentException(
-                    "Unexpected arguments were found: "
-                        + Arrays.toString(Arrays.copyOfRange(args, 1, args.length))
-                );
-            }
-
-            var dir = Paths.get(args[0]);
-            new ThemeCompiler().convertToBinary(dir);
+            
+            System.out.println("Compilation complete.");
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            System.err.println("Error processing directory: " + directory);
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
