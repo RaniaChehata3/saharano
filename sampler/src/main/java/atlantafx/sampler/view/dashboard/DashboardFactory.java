@@ -40,6 +40,22 @@ public class DashboardFactory {
     }
     
     /**
+     * Creates a dashboard view for the currently authenticated user.
+     * Returns null if no user is authenticated.
+     *
+     * @return The dashboard view for the current user, or null if not authenticated
+     */
+    public DashboardView createDashboardForCurrentUser() {
+        User currentUser = authController.getCurrentUser();
+        
+        if (currentUser == null) {
+            return null;
+        }
+        
+        return createDashboardForRole(currentUser.getRole());
+    }
+    
+    /**
      * Creates a dashboard view for a specific role.
      *
      * @param role The role to create a dashboard for

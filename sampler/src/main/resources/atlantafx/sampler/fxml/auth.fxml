@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="atlantafx.sampler.controller.AuthViewController"
+           fx:id="root"
+           stylesheets="@../assets/styles/index.css">
+    
+    <!-- The auth view is a container that will show either login or signup -->
+    <!-- The controller will handle loading the appropriate view -->
+    
+</StackPane> 

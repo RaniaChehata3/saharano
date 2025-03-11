@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.*?>
+<?import atlantafx.base.theme.Styles?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="atlantafx.sampler.controller.DoctorDashboardController"
+            stylesheets="@../assets/styles/index.css">
+    
+    <top>
+        <!-- Nav Bar Section -->
+        <VBox>
+            <fx:include source="components/navbar.fxml"/>
+            <HBox styleClass="page-header" padding="20">
+                <Label text="Doctor Dashboard" styleClass="title-2"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <BorderPane>
+            <left>
+                <!-- Patient List Section -->
+                <VBox fx:id="patientListContainer" prefWidth="400" styleClass="content-panel">
+                    <!-- Will be loaded programmatically -->
+                </VBox>
+            </left>
+            
+            <center>
+                <!-- Patient Record Section -->
+                <StackPane fx:id="patientRecordContainer" styleClass="content-panel">
+                    <!-- Will be loaded programmatically -->
+                    
+                    <!-- Default "no selection" message -->
+                    <VBox fx:id="noSelectionMessage" alignment="CENTER" spacing="10">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                        <Label text="No Patient Selected" styleClass="title-3"/>
+                        <Label text="Please select a patient from the list to view their records." styleClass="text-muted"/>
+                    </VBox>
+                </StackPane>
+            </center>
+        </BorderPane>
+    </center>
+    
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_RIGHT" padding="5 15 5 15">
+            <Label fx:id="statusLabel" text="Ready"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane> 

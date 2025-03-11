@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="atlantafx.sampler.controller.MainAppController"
+           fx:id="root"
+           stylesheets="@../assets/styles/index.css"
+           prefWidth="1200" 
+           prefHeight="800">
+    
+    <!-- This is a container that will show either auth view or dashboard -->
+    <!-- The controller will handle loading the appropriate view based on authentication state -->
+    
+</StackPane> 

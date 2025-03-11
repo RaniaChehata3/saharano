@@ -36,14 +36,16 @@ public class AuthController {
     }
     
     /**
-     * Attempts to log in a user with the provided credentials.
+     * Attempts to log in a user with the given credentials.
      *
      * @param username The username
      * @param password The password
      * @return True if login successful, false otherwise
      */
     public boolean login(String username, String password) {
+        System.out.println("AuthController: Attempting login with username: " + username);
         boolean success = userManager.authenticate(username, password);
+        System.out.println("AuthController: Login result = " + success);
         return success;
     }
     

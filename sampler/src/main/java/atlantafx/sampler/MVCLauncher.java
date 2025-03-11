@@ -6,23 +6,19 @@ import atlantafx.sampler.event.BrowseEvent;
 import atlantafx.sampler.event.DefaultEventBus;
 import atlantafx.sampler.event.HotkeyEvent;
 import atlantafx.sampler.event.Listener;
-import atlantafx.sampler.theme.ThemeManager;
-import atlantafx.sampler.view.MainAppView;
-import fr.brouillard.oss.cssfx.CSSFX;
-import fr.brouillard.oss.cssfx.api.URIToPathConverter;
-import fr.brouillard.oss.cssfx.impl.log.CSSFXLogger;
-import fr.brouillard.oss.cssfx.impl.log.CSSFXLogger.LogLevel;
+import atlantafx.sampler.util.FXMLLoaderHelper;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.nio.file.Paths;
+import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.image.Image;
@@ -33,7 +29,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /**
- * Main application launcher using MVC architecture.
+ * Main application launcher using MVC architecture with FXML.
  */
 public class MVCLauncher extends Application {
 
@@ -60,35 +56,43 @@ public class MVCLauncher extends Application {
             System.out.println("[WARNING] Application is running in development mode.");
         }
 
-        // Use our new MainAppView with authentication instead of ApplicationWindow
-        var root = new MainAppView();
+        try {
+            // Load the main app view from FXML
+            FXMLLoader loader = FXMLLoaderHelper.createLoader("main-app.fxml");
+            Parent root = loader.load();
+            
+            // Create scene
+            var antialiasing = Platform.isSupported(ConditionalFeature.SCENE3D)
+                ? SceneAntialiasing.BALANCED
+                : SceneAntialiasing.DISABLED;
+            var scene = new Scene(root, 1200, 800, false, antialiasing);
+            scene.setOnKeyPressed(this::dispatchHotkeys);
+            
+            // Set default stylesheet directly
+            String appStyle = getClass().getResource("/atlantafx/sampler/assets/styles/index.css").toExternalForm();
+            scene.getStylesheets().add(appStyle);
+            
+            // Apply default modena style
+            Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
 
-        var antialiasing = Platform.isSupported(ConditionalFeature.SCENE3D)
-            ? SceneAntialiasing.BALANCED
-            : SceneAntialiasing.DISABLED;
-        var scene = new Scene(root, 1200, 800, false, antialiasing);
-        scene.setOnKeyPressed(this::dispatchHotkeys);
-        
-        // Set default stylesheet directly
-        String appStyle = getClass().getResource("/atlantafx/sampler/assets/styles/index.css").toExternalForm();
-        scene.getStylesheets().add(appStyle);
-        
-        // Apply default modena style
-        Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+            // Configure stage
+            stage.setScene(scene);
+            stage.setTitle("Medical System - " + System.getProperty("app.name"));
+            loadIcons(stage);
+            stage.setResizable(true);
+            stage.setOnCloseRequest(t -> Platform.exit());
 
-        stage.setScene(scene);
-        stage.setTitle("Medical System - " + System.getProperty("app.name"));
-        loadIcons(stage);
-        stage.setResizable(true);
-        stage.setOnCloseRequest(t -> Platform.exit());
+            // Register event listeners
+            DefaultEventBus.getInstance().subscribe(BrowseEvent.class, this::onBrowseEvent);
 
-        // register event listeners
-        DefaultEventBus.getInstance().subscribe(BrowseEvent.class, this::onBrowseEvent);
-
-        Platform.runLater(() -> {
-            stage.show();
-            stage.requestFocus();
-        });
+            // Show the stage
+            Platform.runLater(() -> {
+                stage.show();
+                stage.requestFocus();
+            });
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load application view", e);
+        }
     }
 
     private void loadIcons(Stage stage) {

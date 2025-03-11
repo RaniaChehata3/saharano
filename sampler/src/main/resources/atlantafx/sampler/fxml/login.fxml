@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.PasswordTextField?>
+<?import atlantafx.base.theme.Styles?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="atlantafx.sampler.controller.LoginController"
+           stylesheets="@../assets/styles/index.css"
+           alignment="CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+           
+    <Card fx:id="loginCard">
+        <body>
+            <VBox spacing="10" alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Header -->
+                <TextFlow textAlignment="CENTER" prefWidth="300">
+                    <Text text="Login" styleClass="title-2"/>
+                    <Text text="&#10;Please enter your credentials to continue" styleClass="text-subtle"/>
+                    <padding>
+                        <Insets bottom="20" top="0" right="0" left="0"/>
+                    </padding>
+                </TextFlow>
+                
+                <!-- Username Field -->
+                <VBox spacing="5">
+                    <Label text="Username"/>
+                    <TextField fx:id="usernameField" prefWidth="300" promptText="Username"/>
+                </VBox>
+                
+                <!-- Password Field -->
+                <VBox spacing="5">
+                    <Label text="Password"/>
+                    <PasswordTextField fx:id="passwordField" prefWidth="300" promptText="Password"/>
+                </VBox>
+                
+                <!-- Error message -->
+                <Label fx:id="errorLabel" styleClass="danger" visible="false" managed="false"/>
+                
+                <!-- Login Button -->
+                <Button fx:id="loginButton" text="Login" styleClass="accent" prefWidth="300" onAction="#handleLogin"/>
+                
+                <!-- Footer -->
+                <HBox alignment="CENTER">
+                    <padding>
+                        <Insets top="20" right="0" bottom="0" left="0"/>
+                    </padding>
+                    <Text text="Don't have an account? "/>
+                    <Hyperlink fx:id="signupLink" text="Sign up" onAction="#handleSignupRequest"/>
+                </HBox>
+                
+                <!-- Quick Access Section -->
+                <Label text="">
+                    <padding>
+                        <Insets top="10" right="0" bottom="0" left="0"/>
+                    </padding>
+                </Label>
+                <Label text="Quick Access"/>
+                
+                <VBox fx:id="quickAccessContainer" spacing="10" alignment="CENTER">
+                    <GridPane fx:id="buttonGrid" alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" />
+                            <ColumnConstraints halignment="CENTER" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints valignment="CENTER" />
+                            <RowConstraints valignment="CENTER" />
+                            <RowConstraints valignment="CENTER" />
+                        </rowConstraints>
+                        <padding>
+                            <Insets top="10" right="0" bottom="10" left="0"/>
+                        </padding>
+                        <hgap>10</hgap>
+                        <vgap>10</vgap>
+                        
+                        <!-- Role buttons will be added programmatically -->
+                    </GridPane>
+                    
+                    <Text text="Click any role button to login instantly" styleClass="text-caption"/>
+                </VBox>
+            </VBox>
+        </body>
+    </Card>
+    
+</StackPane> 
